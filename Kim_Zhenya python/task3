@@ -1,1 +1,25 @@
 
+import sys
+import json
+
+# Чтение данных из файлов tests.json и values.json
+with open(sys.argv[1], 'r') as f:
+    tests = json.load(f)
+
+with open(sys.argv[2], 'r') as f:
+    values = json.load(f)
+
+# Функция для заполнения значения в структуре тестов
+def fill_values(tests, values):
+    for test in tests:
+        if 'id' in test and test['id'] in values:
+            test['value'] = values[test['id']]
+        if 'children' in test:
+            fill_values(test['children'], values)
+
+# Заполнение значения в структуре тестов
+fill_values(tests, values)
+
+# Запись отчета в файл report.json
+with open('report.json', 'w') as f:
+    json.dump(tests, f, indent=4)
