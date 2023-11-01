@@ -1,1 +1,37 @@
 
+def point_position(x, y, center_x, center_y, radius):
+    distance = math.sqrt((x - center_x)**2 + (y - center_y)**2)  # Расстояние между точкой и центром окружности
+    
+    if distance < radius:
+        return "Внутри окружности"
+    elif distance == radius:
+        return "На окружности"
+    else:
+        return "Снаружи окружности"
+
+def find_path(array, m):
+    path = [array[0]]  # Инициализируем путь с первым элементом массива
+    current_index = 0  # Индекс текущего элемента
+
+    while current_index != len(array) - 1:  # Пока текущий элемент не равен последнему элементу массива
+        current_index = (current_index + m) % len(array)  # Вычисляем индекс следующего элемента
+        path.append(array[current_index])  # Добавляем следующий элемент в путь
+
+    return path
+
+# Чтение координат и радиуса окружности из первого файла
+with open(sys.argv[1], 'r') as f:
+    center_x, center_y, radius = map(float, f.readline().split())
+
+# Чтение координат точек из второго файла
+with open(sys.argv[2], 'r') as f:
+    for line in f:
+        x, y = map(float, line.split())
+        position = point_position(x, y, center_x, center_y, radius)
+        print(position)
+
+# Вычисление пути по заданному массиву и интервалу
+array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+m = 3
+path = find_path(array, m)
+print(path)
